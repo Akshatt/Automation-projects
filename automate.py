@@ -9,13 +9,25 @@ class MyHandler(FileSystemEventHandler):
     i = 1
 
     def on_modified(self, event):
-        for filename in os.listdir(folder_to_track):
+        path_entries = os.listdir(folder_to_track)
+        path_files, path_folders = [], []
+
+        for entry in path_entries:
+            if '.' in entry:
+                path_files.append(entry)
+            elif '.' not in entry:
+                path_folders.append(entry)
+
+        if 'pdfs' not in os.listdir(folder_destination):
+            os.mkdir(folder_destination + "/pdfs")
+
+        for filename in path_files:
             src = folder_to_track + "/" + filename
-            new_dest = folder_destination + "/" + filename
+            new_dest = folder_destination + "/pdfs/" + filename
             os.rename(src, new_dest)
 
 
-folder_to_track = 'C:/Users/Akshat/Desktop/Course Certificates - Copy'
+folder_to_track = 'C:/Users/Akshat/Desktop/my_folder'
 folder_destination = 'C:/Users/Akshat/Desktop/new_folder'
 event_handler = MyHandler()
 observer = Observer()
