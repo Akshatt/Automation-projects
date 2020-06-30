@@ -6,9 +6,8 @@ import json
 
 
 class MyHandler(FileSystemEventHandler):
-    i = 1
 
-    def on_any_event(self, event):
+    def on_modified(self, event):
         path_entries = os.listdir(folder_to_track)
         path_files, path_folders = {}, []
 
