@@ -8,23 +8,31 @@ import json
 class MyHandler(FileSystemEventHandler):
     i = 1
 
-    def on_modified(self, event):
+    def on_any_event(self, event):
         path_entries = os.listdir(folder_to_track)
-        path_files, path_folders = [], []
+        path_files, path_folders = {}, []
 
         for entry in path_entries:
             if '.' in entry:
-                path_files.append(entry)
+                key = entry.split('.')[-1]
+                if key in path_files:
+                    path_files[key].append(entry)
+                else:
+                    path_files[key] = [entry]
+
             elif '.' not in entry:
                 path_folders.append(entry)
 
-        if 'pdfs' not in os.listdir(folder_destination):
-            os.mkdir(folder_destination + "/pdfs")
+        for key in path_files.keys():
+            if key not in os.listdir(folder_destination):
+                os.mkdir(folder_destination + "/" + key)
 
-        for filename in path_files:
-            src = folder_to_track + "/" + filename
-            new_dest = folder_destination + "/pdfs/" + filename
-            os.rename(src, new_dest)
+        for key, filename in path_files.items():
+            while filename:
+                file = filename.pop()
+                src = folder_to_track + "/" + file
+                new_dest = folder_destination + "/" + key + "/" + file
+                os.rename(src, new_dest)
 
 
 folder_to_track = 'C:/Users/Akshat/Desktop/my_folder'
