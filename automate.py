@@ -20,13 +20,12 @@ else:
 
 def assignrepos(repo):
     try:
-        if repo.get_contents("README.md"):
-            return False
+        repo.get_contents("README.md")
     except:
         if private == 1 and repo.private:
-            private_repos.append(repo)
+            private_repos.append(repo.name)
         else:
-            public_repos.append(repo)
+            public_repos.append(repo.name)
         return True
 
 
