@@ -13,24 +13,18 @@ class MyHandler(FileSystemEventHandler):
 
         for entry in path_entries:
             if '.' in entry:
-                key = entry.split('.')[-1]
-                if key in path_files:
-                    path_files[key].append(entry)
-                else:
-                    path_files[key] = [entry]
+                filetype = entry.split('.')[-1]
+                path_files[entry] = filetype
+
+                if filetype not in os.listdir(folder_destination):
+                    os.mkdir(folder_destination + "/" + filetype)
 
             elif '.' not in entry:
                 path_folders.append(entry)
 
-        for key in path_files.keys():
-            if key not in os.listdir(folder_destination):
-                os.mkdir(folder_destination + "/" + key)
-
-        for key, filename in path_files.items():
-            while filename:
-                file = filename.pop()
-                src = folder_to_track + "/" + file
-                new_dest = folder_destination + "/" + key + "/" + file
+        for filename, filetype in path_files.items():
+                src = folder_to_track + "/" + filename
+                new_dest = folder_destination + "/" + filetype + "/" + filename
                 os.rename(src, new_dest)
 
 
