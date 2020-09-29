@@ -44,7 +44,7 @@ def takeCommand():
 
     try:
         print("Recognizing...")
-        query = r.recognize_sphinx(audio, language='en-in')
+        query = r.recognize_google(audio, language='en-in')
         print(f'User said: {query}\n')
     
     except Exception as e:
@@ -85,6 +85,10 @@ if __name__ == "__main__":
         elif 'time' in query:
             strTime = datetime.datetime.now().strftime("%H:%M:%S")
             speak(f"Sir, the time is: {strTime}")
+        
+        elif 'blue j' in query:
+            filepath = "C:\\Program Files\\BlueJ\\BlueJ.exe"    
+            os.startfile(filepath)
 
         elif 'bye' in query:
             speak("Goodbye, it was nice talking to you!")
